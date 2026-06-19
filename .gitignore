@@ -2,9 +2,13 @@ Mark.htm
 Mark1.htm
 Mark_files/
 Mark1_files/
+Option 1_ AI-Graded Submission and Evaluation _ Coursera.htm
+Option 1_ AI-Graded Submission and Evaluation _ Coursera_files/
+.vscode/
 node_modules/
 package.json
 package-lock.json
+db.sqlite3
 __pycache__/
 *.pyc
 .pylint.d/

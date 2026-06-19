@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .models import Choice, Course, Enrollment, Question, Submission
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
@@ -118,8 +119,8 @@ def submit(request, course_id):
     submission = Submission.objects.create(enrollment=enrollment)
     selected_choice_ids = extract_answers(request)
     selected_choices = Choice.objects.filter(
+        Q(question__lesson__course=course) | Q(question__course=course),
         id__in=selected_choice_ids,
-        question__lesson__course=course,
     )
     submission.choices.set(selected_choices)
 
@@ -150,8 +151,8 @@ def show_exam_result(request, course_id, submission_id):
     )
     selected_ids = list(submission.choices.values_list('id', flat=True))
     questions = Question.objects.filter(
-        lesson__course=course,
-    ).prefetch_related('choice_set').order_by('lesson__order', 'id')
+        Q(lesson__course=course) | Q(course=course),
+    ).distinct().prefetch_related('choice_set').order_by('lesson__order', 'id')
 
     total_score = 0
     question_results = []
@@ -165,10 +166,10 @@ def show_exam_result(request, course_id, submission_id):
             'is_correct': is_correct,
         })
 
-    total_possible_score = sum(question.grade for question in questions)
+    possible_score = sum(question.grade for question in questions)
     grade = 0
-    if total_possible_score:
-        grade = round(total_score / total_possible_score * 100)
+    if possible_score:
+        grade = round(total_score / possible_score * 100)
 
     context = {
         'course': course,
@@ -176,7 +177,8 @@ def show_exam_result(request, course_id, submission_id):
         'selected_ids': selected_ids,
         'question_results': question_results,
         'score': total_score,
-        'total': total_possible_score,
+        'possible': possible_score,
+        'total': possible_score,
         'grade': grade,
     }
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)

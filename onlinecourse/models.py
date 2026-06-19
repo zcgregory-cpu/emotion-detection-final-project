@@ -98,11 +98,17 @@ class Enrollment(models.Model):
 class Question(models.Model):
     """Assessment question attached to a lesson in a course."""
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, null=True, blank=True)
     question_text = models.TextField()
     grade = models.IntegerField(default=1)
 
     def __str__(self):
         return self.question_text
+
+    def save(self, *args, **kwargs):
+        if self.lesson_id and not self.course_id:
+            self.course = self.lesson.course
+        super().save(*args, **kwargs)
 
     def is_get_score(self, selected_ids):
         """Return True only when all and only correct choices are selected."""
@@ -118,7 +124,7 @@ class Question(models.Model):
 class Choice(models.Model):
     """Answer choice for a question."""
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=1000)
+    choice_text = models.CharField(max_length=100)
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):
@@ -129,7 +135,6 @@ class Submission(models.Model):
     """Learner exam submission for one course enrollment."""
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
-    created_at = models.DateTimeField(default=now)
 
     def __str__(self):
-        return f"Submission {self.id} for {self.enrollment.user.username}"
+        return f"Submission {self.id} for enrollment {self.enrollment.id}"

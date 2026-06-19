@@ -8,7 +8,7 @@ The required submission files are:
 
 - `onlinecourse/models.py`
 - `onlinecourse/admin.py`
-- `onlinecourse/templates/onlinecourse/course_details_bootstrap.html`
+- `onlinecourse/templates/onlinecourse/course_detail_bootstrap.html`
 - `onlinecourse/views.py`
 - `onlinecourse/urls.py`
 - `submission_artifacts/03-admin-site.png`

@@ -16,7 +16,7 @@ Upload `submission_artifacts/03-admin-site.png`.
 
 ## Question 4
 
-https://github.com/zcgregory-cpu/emotion-detection-final-project/blob/main/onlinecourse/templates/onlinecourse/course_details_bootstrap.html
+https://github.com/zcgregory-cpu/emotion-detection-final-project/blob/main/onlinecourse/templates/onlinecourse/course_detail_bootstrap.html
 
 ## Question 5
 

@@ -1,0 +1,10 @@
+Mark.htm
+Mark1.htm
+Mark_files/
+Mark1_files/
+node_modules/
+package.json
+package-lock.json
+__pycache__/
+*.pyc
+.pylint.d/
